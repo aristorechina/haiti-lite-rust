@@ -1,0 +1,31 @@
+# Rust build and release output
+/target/
+/dist/
+*.pdb
+*.d
+*.rs.bk
+
+# IDE and editor files
+.vscode/
+.idea/
+.vs/
+*.code-workspace
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.swp
+*.swo
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Local logs and environment files
+*.log
+.env
+.env.*
+!.env.example
