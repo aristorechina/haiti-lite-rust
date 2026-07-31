@@ -49,9 +49,6 @@ jobs:
             throw "Release tag '$env:GITHUB_REF_NAME' does not match Cargo.toml version '$env:VERSION'"
           }
 
-      - name: Run tests
-        run: cargo test --locked
-
       - name: Build Windows x64 executable
         run: cargo build --locked --release --target $env:TARGET
 

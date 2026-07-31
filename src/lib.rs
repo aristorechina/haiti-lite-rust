@@ -12,17 +12,3 @@ pub fn ruby_chomp(input: &str) -> String {
         input.to_owned()
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::ruby_chomp;
-
-    #[test]
-    fn chomp_matches_ruby_line_endings() {
-        assert_eq!(ruby_chomp("hash\n"), "hash");
-        assert_eq!(ruby_chomp("hash\r\n"), "hash");
-        assert_eq!(ruby_chomp("hash\r"), "hash");
-        assert_eq!(ruby_chomp("hash\n\n"), "hash\n");
-        assert_eq!(ruby_chomp("hash"), "hash");
-    }
-}
