@@ -40,13 +40,18 @@ jobs:
           "version=$($package.version)" >> $env:GITHUB_OUTPUT
 
       - name: Validate release tag
-        if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          REF_TYPE: ${{ github.ref_type }}
         run: |
-          if ($env:GITHUB_REF_NAME -ne $env:VERSION) {
+          if ($env:REF_TYPE -eq "tag" -and $env:GITHUB_REF_NAME -ne $env:VERSION) {
             throw "Release tag '$env:GITHUB_REF_NAME' does not match Cargo.toml version '$env:VERSION'"
+          }
+          if ($env:REF_TYPE -eq "tag") {
+            Write-Output "Validated release tag '$env:GITHUB_REF_NAME'."
+          } else {
+            Write-Output "Branch or manual run: release will use version tag '$env:VERSION'."
           }
 
       - name: Build Windows x64 executable
@@ -64,11 +69,11 @@ jobs:
           Compress-Archive -Path $staging -DestinationPath "dist\haiti-lite-rust-$env:VERSION-windows-x64.zip" -Force
 
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.version }}
           name: ${{ steps.version.outputs.version }}
+          target_commitish: ${{ github.sha }}
           generate_release_notes: true
           files: |
             dist/haiti-lite-rust-windows-x64/haiti-lite-rust.exe
